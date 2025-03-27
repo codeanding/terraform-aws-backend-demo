@@ -1,0 +1,63 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("API_DB_URL")
+}
+
+enum TradeStatus {
+  PENDING
+  ACCEPTED
+  REJECTED
+  CANCELLED
+}
+
+model User {
+  id        String   @id @default(uuid()) @map("id")
+  email     String   @unique @map("email")
+  password  String   @map("password")
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @default(now()) @updatedAt @map("updated_at")
+
+  cards          Card[]
+  tradesSent     Trade[] @relation("OfferedBy")
+  tradesReceived Trade[] @relation("RequestedBy")
+
+  @@map("users")
+}
+
+model Card {
+  id        String   @id @default(uuid()) @map("id")
+  name      String   @map("name")
+  rarity    String   @map("rarity")
+  ownerId   String?  @map("owner_id")
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @default(now()) @updatedAt @map("updated_at")
+
+  owner            User?  @relation(fields: [ownerId], references: [id])
+  offeredInTrade   Trade? @relation("OfferedCard")
+  requestedInTrade Trade? @relation("RequestedCard")
+
+  @@map("cards")
+}
+
+model Trade {
+  id String @id @default(uuid()) @map("id")
+
+  offeredById     String      @map("offered_by_id")
+  requestedById   String      @map("requested_by_id")
+  cardOfferedId   String      @unique @map("card_offered_id")
+  cardRequestedId String      @unique @map("card_requested_id")
+  status          TradeStatus @default(PENDING) @map("status")
+  createdAt       DateTime    @default(now()) @map("created_at")
+  updatedAt       DateTime    @default(now()) @updatedAt @map("updated_at")
+
+  offeredBy     User @relation("OfferedBy", fields: [offeredById], references: [id])
+  requestedBy   User @relation("RequestedBy", fields: [requestedById], references: [id])
+  cardOffered   Card @relation("OfferedCard", fields: [cardOfferedId], references: [id])
+  cardRequested Card @relation("RequestedCard", fields: [cardRequestedId], references: [id])
+
+  @@map("trades")
+}

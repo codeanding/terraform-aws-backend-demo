@@ -1,0 +1,11 @@
+version: '3.8'
+
+services:
+  postgres-tcg:
+    image: postgres:17.4
+    environment:
+      POSTGRES_USER: tcg_user
+      POSTGRES_PASSWORD: tcg_pwd
+      POSTGRES_DB: tcg_demo
+    ports:
+      - '54390:5432'

@@ -1,0 +1,43 @@
+# === Node / NestJS ===
+node_modules/
+dist/
+.env
+.env.*
+npm-debug.log*
+yarn-error.log*
+coverage/
+
+# Logs
+logs
+*.log
+
+# Compiled output
+*.tsbuildinfo
+
+# IDE / Editor folders
+.vscode/
+.idea/
+*.swp
+
+# === Docker ===
+*.tgz
+*.dockerfile
+docker-compose.override.yml
+
+# === Terraform ===
+*.tfstate
+*.tfstate.*
+.terraform/
+.terraform.lock.hcl
+terraform.tfvars
+terraform.tfvars.json
+crash.log
+plan.out
+
+# === AWS credentials or config files ===
+.aws/
+*.pem
+
+# === Misc ===
+.DS_Store
+Thumbs.db
